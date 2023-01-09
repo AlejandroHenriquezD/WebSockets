@@ -1,17 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import { useParams } from "react-router-dom";
-// import ReactModal from "react-modal";
-// import { useModal } from "react-modal-hook";
+
 import "./MainPage.css";
 
 function MainPage() {
-  // const [showModal, hideModal] = useModal(() => (
-  //   <ReactModal isOpen>
-  //     <p>Modal content</p>
-  //     <button onClick={hideModal}>Hide modal</button>
-  //   </ReactModal>
-  // ));
   const [users, setUsers] = useState([]);
   const [helps, setHelps] = useState([]);
 
@@ -39,16 +32,6 @@ function MainPage() {
     );
   };
 
-  // const sendMessageRing = (name) => {
-  //   ws.current.send(
-  //     JSON.stringify({
-  //       helper: username,
-  //       helped: name,
-  //       type: "ringing the bell"
-  //     })
-  //   );
-  // };
-
   useEffect(() => {
     //Example: ws://localhost:8080/?username=tiburcio
     const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/?username=${username}`
@@ -61,10 +44,6 @@ function MainPage() {
     ws.current.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
-      // if (data.type && data.type == "ringing the bell") {
-      //   showModal();
-      //   return;
-      // }
       setUsers(data.users);
       setHelps(data.helps);
     };
@@ -96,7 +75,6 @@ function MainPage() {
                   <span>
                     It's {u.helped}'s turn.
                     <button onClick={() => sendMessageNext(u.helped)}>Help next</button>
-                    {/* <button onClick={() => sendMessageRing(u.helped)}>Ring!!!</button> */}
                   </span>
                   :
                   u.helped}
