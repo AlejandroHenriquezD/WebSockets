@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Layout from "../components/Layout";
+import logo_pequeño from '../logo_pequeño.png';
 import "./LoginPage.css";
+
 
 function LoginPage() {
 
@@ -20,18 +21,21 @@ function LoginPage() {
   }
 
   return (
-    <Layout>
+    <div className="center">
+      <h1>Central Uniformes</h1>
+      <img src={logo_pequeño} alt=""></img>
+      <h3>Plataforma para fichar horas</h3>
       <form id="login-page-username-form">
-        <label htmlFor="login-page-username">Type the username you'll use in the chat</label>
-        <input id="login-page-username" type="text" placeholder="Your name or nickname"
+        <label htmlFor="login-page-username">Introduce tu nombre y apellidos</label>
+        <input id="login-page-username" type="text" placeholder="Nombre y Apellidos"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-        {errorMessage ? <span id="login-page-error-message">* Type in a username or nickname</span> : <></>}
-        <button id="login-page-login-button" type="button" onClick={handleSubmit}>Log in the chat</button>
+        {errorMessage ? <span id="login-page-error-message">* Introduce nombre y apellidos</span> : <></>}
+        <button id="login-page-login-button" type="button" onClick={handleSubmit}>Fichar</button>
       </form>
-    </Layout>
+    </div>
   )
 }
 

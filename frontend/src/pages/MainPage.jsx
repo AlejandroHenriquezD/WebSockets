@@ -1,36 +1,30 @@
 import React, { useRef, useState, useEffect } from "react";
-import Layout from "../components/Layout";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import logo_pequeño from '../logo_pequeño.png';
 
 import "./MainPage.css";
 
 function MainPage() {
+
+  const navigate = useNavigate();
+
   const [users, setUsers] = useState([]);
   const [helps, setHelps] = useState([]);
+  const [setErrorMessage] = React.useState(false);
 
   const { username } = useParams();
 
   const ws = useRef();
 
-  const sendMessageNext = (name) => {
-    ws.current.send(
-      JSON.stringify({
-        helper: username,
-        helped: name,
-        type: "next please"
-      })
-    );
-  };
+  function handleSubmit() {
+    if (!username) {
+      setErrorMessage(true);
+      return;
+    }
 
-  const sendMessageAsk = (name) => {
-    ws.current.send(
-      JSON.stringify({
-        helper: name,
-        helped: username,
-        type: "ask for help"
-      })
-    );
-  };
+    navigate(`/`);
+  }
 
   useEffect(() => {
     //Example: ws://localhost:8080/?username=tiburcio
@@ -63,58 +57,27 @@ function MainPage() {
   }, [helps]);
 
   return (
-    <Layout>
-      <div id="helping-others-view-container">
-        <h2>Helping others</h2>
-        <h3>List of people asking for your help</h3>
-        {
-          helps.filter(help => help.helper === username).map((u, index) => {
-            return (
-              <div class="helped" key={index}>
-                <div>{index === 0 ?
-                  <span>
-                    It's {u.helped}'s turn.
-                    <button onClick={() => sendMessageNext(u.helped)}>Help next</button>
-                  </span>
-                  :
-                  u.helped}
-                </div>
-              </div>
-            );
-          })
-        }
-      </div>
+    <div className="main">
       <div id="helping-me-view-container">
-        <h2>Helping me</h2>
-        <h3>List of people to help me</h3>
+        <h2>Lista Empleados</h2>
+        <h3>Lista de Empleados Fichando</h3>
+        <img src={logo_pequeño} alt=""></img>
         {
           users.map((user, index) => {
-            let usersWaiting = helps.filter((help) => help.helper === user.username);
-            let waitingForHelper = usersWaiting.filter((help) => help.helped === username);
-            let waitingIndexOf = null;
-            for (let i = 0; i < usersWaiting.length; i++) {
-              if (usersWaiting[i].helped === username) {
-                waitingIndexOf = i;
-                break;
-              }
-            }
-            
-            if (user.username !== username)
-              return (
-                <div class="helper" key={index}>
-                  <div>People in {user.username}'s row: {usersWaiting.length}</div>
-                  <div>{waitingForHelper.length === 0 ? <button onClick={() => sendMessageAsk(user.username)}>Ask for {user.username}'s help</button> : <></>}</div>
-                  <div>{waitingForHelper.length > 0 ? `${waitingIndexOf} before you waiting for ${user.username}'s help` : <></>}</div>
-                </div>
-              )
-              return null;
+
+
+            return (
+              <div class="helper" key={index}>
+                <div>{user.username} esta fichando</div>
+              </div>
+            )
           })
-          
         }
+        <button className="boton" type="button" onClick={handleSubmit}>Dejar de fichar</button>
       </div>
 
       <div ref={scrollTarget} />
-    </Layout>
+    </div>
   );
 }
 
